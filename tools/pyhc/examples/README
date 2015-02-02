@@ -1,0 +1,8 @@
+
+Running scripts
+---------------
+
+1. Edit  sys.path.append call in script. 
+2. Use visit (https://wci.llnl.gov/codes/visit/) to view vtk files if there is output.
+
+

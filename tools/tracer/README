@@ -1,0 +1,16 @@
+TEST PARTICLE TRACER
+
+RUNNING
+
+Generate configuration file with the command:
+
+iontracer -c > name_of_configuration_file
+
+Then follow the instructions in the configuration file and finally
+give the command:
+
+iontracer name_of_configurations_file
+
+VISUALIZATION
+
+Use, for example, VisIt by LLNL to visualize the produced VTK files.

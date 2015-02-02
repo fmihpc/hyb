@@ -1,0 +1,306 @@
+﻿HYB SIMULATION CODE
+
+Folders:
+
+cfg/: Example simulation run config files
+src/: C++ source files of the HYB code
+
+REQUIRED PACKAGES
+
+Ubuntu
+
+The code:
+
+g++
+
+For documentation:
+
+doxygen
+graphviz
+pdflatex
+texlive-latex-extra
+
+COMPILATION
+
+Use the command "make" and, for example, the GCC compiler to compile
+HYB. Compile time options are listed on top of Makefile.
+
+"make doc" creates Doxygen documentation for the HYB code in the doc/
+folder. "make debug" includes debugging information in the compiled
+binary and disables compiler optimizations. "make clean" removes the
+compiled files and files created by the HYB code in the current folder.
+
+COMPILE OPTIONS
+
+Some features of the HYB code are selected before compilation. The
+following compile time options are switched on (true) or off (false)
+in Makefile:
+
+==== USE_SPHERICAL_COORDINATE_SYSTEM ====
+
+true  = Use spherical coordinate system
+false = Use Cartesian coordinate system
+
+Note: Use additional config file parameters to setup a spherical run.
+
+==== USE_PARTICLE_SUBCYCLING ====
+
+true  = Subcycle particles
+false = No particle sybcycling
+
+Note: Use additional config file parameters to setup subcycling.
+
+==== IGNORE_ELECTRIC_FIELD_HALL_TERM ====
+
+true  = Ignore the JxB Hall term in the electron momentum (Ohm's law)
+        equation (E = -V x B).
+false = Use the JxB Hall term in the electron momentum (Ohm's law)
+        equation (E = -Ue x B).
+
+==== PERIODIC_FIELDS_Y ====
+
+true  = Periodic magnetic field in the y-direction used in reconnection runs.
+false = No periodic magnetic field.
+
+==== RECONNECTION_GEOMETRY ====
+
+true  = Inject incident plasma (solarwind) from +x and -x walls
+        towards each other with opposite magnetic fields.
+false = Inject incident plasma (solarwind) only from +x wall.
+
+==== VTK_SHOW_GHOST_CELLS ====
+
+true  = Include simulation mesh ghost cells in VTK files.
+false = Do not include ghost cells in VTK files.
+
+==== NO_DIAGNOSTICS ====
+
+true  = No particle or field counting.
+false = Normal particle and field diagnostics.
+
+==== SAVE_POPULATION_AVERAGES ====
+
+true  = Save temporal average quantities for each particle population
+        separately.
+false = No population temporal averages.
+
+==== SAVE_PARTICLES_ALONG_ORBIT ====
+
+true  = Save particles in ASCII file in grid cells touching a given
+        orbit (x,y,z file).
+false = No particle saving.
+
+Note: Use additional config file parameters to setup particle saving.
+
+==== SAVE_PARTICLE_CELL_SPECTRA ====
+
+true  = Save energy spectra of particles in each grid cell.
+false = No particle spectra saving.
+
+Note: Use additional config file parameters to setup spectra saving.
+
+RUNNING
+
+Start a new simulation run with the command:
+
+./hyb -f run.cfg
+
+Restart a simulation run from a breakpoint with the command:
+
+./hyb -f run.cfg -cont breakpoint.dat
+
+CONFIG FILE
+
+A simulation run is initialized using a configuration file (e.g.
+run.cfg). Numerical and physical parameters of the run are specified
+in the config file. Example config files are included in the cfg/
+folder. Config file parameters are described in the example config
+files.
+
+A config file includes three different types of parameters: const,
+iniconst and normal variables. Keyword const means that the value of
+the parameter is defined in the code and cannot be changed in the
+config file. Keyword iniconst means that the value of the parameter is
+read from the config file during the initialization of a simulation
+run and cannot be changed after that. The values of normal config file
+parameters (no prefix) are updated at every inputInterval during a
+simulation run.
+
+Pure numerical values can be assigned directly to config file
+parameters. Strings between = ; characters are evaluated as RPN
+(Reverse Polish Notation) expressions using config file variables.
+For example, the RPN expression =R_P 5.0 /; returns the numerical
+value of R_P/5.0.
+
+OUTPUT FILES
+
+Most HYB output files have headers describing their content.
+
+simu.log        : General simulation log (ASCII)
+simu.err        : General simulation error log (ASCII)
+params.log      : Simulation parameters as a function of time (ASCII)
+*.hc            : 3-D mesh of field and particle quantities in HC
+                  format (Binary/ASCII)
+*.vtk           : 3-D mesh of field and particle quantities in VTK
+                  format (Binary/ASCII)
+pop*.log        : Particle population log (ASCII)
+field.log       : Field quantities log (ASCII)
+breakpoint*.dat : Simulation breakpoint (Binary)
+
+particles_along*.dat : particles in cells touching the spacecraft
+                       orbit and cell indices (ASCII)
+
+HC FORMAT
+
+HC (Hierarchical Cartesian) is the internal HYB 3-dimensional mesh
+format, which can be analyzed and visualized using the software in the
+tools/ folder.
+
+average_hybstate_*.hc : Temporal average plasma quantities (all
+                        populations)
+plasma_hybstate_*.hc  : Snapshot plasma quantities (all populations)
+EXTRA_*.hc            : Extra information like the neutral density and
+                        resistivity profiles
+*_hybstate_*.hc       : Population snapshot quantities
+*_ave_hybstate_*.hc   : Population temporal average quantities
+*_spectra_*.hc        : Particle energy spectra
+
+VTK FORMAT
+
+VTK implementation of the legacy Visualization Toolkit 3-dimensional
+mesh format, which can be analyzed by using many programs, for
+example, the VisIt visualization tool by LLNL.
+
+CODING STYLE
+
+Character encoding is UTF-8. Doxygen style comments are preferred.
+Source code files (*.cpp *.h) are indented with the command:
+
+astyle --indent=spaces=4 --style=linux
+
+DESCRIPTIONS OF THE SOURCE CODE FILES
+
+The source code is locate in the src/ folder.
+
+==== atmosphere.cpp/h ====
+
+Atmospheric neutral corona profiles, photoionization profiles and
+ionospheric emission profiles.
+
+==== backgroundcharge.cpp/h ====
+
+Background charge density profiles.
+
+==== boundaries.cpp ====
+
+Particle boundary conditions for the outer and inner boundaries.
+
+==== chemistry.cpp/h ==== ====
+
+Particle processes such as charge exchange and electron impact
+ionization.
+
+==== definitions.cpp/h ====
+
+General definitions and functions.
+
+==== detector.cpp/h ====
+
+Particle and field detectors.
+
+==== diagnostics.cpp/h ====
+
+Particle and field diagnostics.
+
+==== forbidsplitjoin.cpp/h ====
+
+Forbid split&join profiles.
+
+==== grid.cpp/h ====
+
+Simulation mesh and output mesh file writers for the HC format.
+
+==== logger.cpp/h ====
+
+Log file writer.
+
+==== magneticfield.cpp/h ====
+
+Magnetic field profiles.
+
+==== main.cpp ====
+
+Main program.
+
+==== params.cpp/h ====
+
+Simulation parameters and config file reader.
+
+==== particle.cpp/h ====
+
+Macro particle and particle list classes.
+
+==== population.cpp/h ====
+
+Particle population base class.
+
+==== population_exospheric.cpp/h ====
+
+Exospheric particle population injected by photoionization of neutral
+corona profile.
+
+==== population_imf.cpp/h ====
+
+IMF-directed particle population.
+
+==== population_ionospheric.cpp/h ====
+
+Ionospheric particle population injected by emission from a spherical
+shell.
+
+==== population_solarwind.cpp/h ====
+
+Solar wind particle population injected from the +-X walls.
+
+==== population_uniform.cpp/h ====
+
+Particle population with uniform density.
+
+==== random.cpp/h ====
+
+Random generators.
+
+==== refinement.cpp/h ====
+
+Mesh refinement profiles.
+
+==== resistivity.cpp/h ====
+
+Resistivity profiles.
+
+==== simulation.cpp/h ====
+
+Simulation main class. Simulation initialization, time loop, particle
+and field propagation and magnetic field boundary condition functions
+are located here.
+
+==== splitjoin.cpp/h ====
+
+Macro particle split and joing methods.
+
+==== timepool.cpp/h ====
+
+Profiling tools.
+
+==== transformations.h ====
+
+Coordinate transformations for the spherical coordinate system.
+
+==== vectors.cpp/h ====
+
+3-dimensional C++ vector class.
+
+====  vis/* ====
+
+General output mesh and particle file writer and implementation for
+the VTK format.

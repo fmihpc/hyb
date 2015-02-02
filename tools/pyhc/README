@@ -1,0 +1,19 @@
+PYTHON HC FILE INTERFACE
+
+A minimal Python module (the same as the HC library for C++) for
+getting interpolated quantities from a simulation mesh contained in an
+HC file. The Python module is made by using the wrapping tool called
+SWIG, which actually generates the C code for the C extension.
+
+If you want to run the scripts in the examples directory, you will
+also have to install the packages python-scipy and python-matplotlib.
+
+USING THE PYTHON MODULE
+
+To import module to script use the commands:
+
+import sys
+sys.path.append("THIS STRING CONTAINS LOCATION OF _pyhc.so")
+import pyhc
+
+See examples/ directory for Python examples.

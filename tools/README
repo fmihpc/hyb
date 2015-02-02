@@ -1,0 +1,81 @@
+﻿HYB HC TOOLS
+
+HC tools are a set of programs to analyze and visualize files that are
+in the HC (Hierarchical Cartesian) format produced by the HYB
+simulation code. The programs are designed for the Linux environment
+and the GUI uses Tcl/Tk and X libraries.
+
+Folders:
+
+hcvis/  : Interpolation and visualization of HC files
+misc/   : Miscellaneous HC file and HYB log file tools
+pyhc/   : Python interface for HC tools
+src/    : HC format library
+tracer/ : Test particle tracer using electric and magnetic fields
+          interpolated from HC files
+
+Programs:
+
+hcvis    : 3-D visualization of HC files
+hcintpol : 3-D interpolation (linear/zeroth order) of quantities from
+           HC files at arbitrary points (x,y,z)
+hc2*     : Convert HC files in other formats (experimental)
+hyblog_* : Plot and create PDF files from HYB log files (uses gnuplot)
+
+REQUIRED PACKAGES
+
+Ubuntu 14.04.1 LTS (amd64)
+
+Code in src/*, misc/* and hcvis/hcintpol require only:
+
+g++
+
+hcvis/hcvis requires:
+
+libxi-dev
+libxmu-dev
+freeglut3-dev
+tcl8.5-dev
+tk8.5-dev
+
+blt-dev package is needed for 1-D plotting in hcvis, but the current
+BLT version on Ubuntu 14.04.1 LTS conflicts with Python version. Set
+"HAVE_BLT = false" in hcvis/Makefile to deal with this error.
+
+pyhc/* requires:
+
+swig
+swig-doc
+swig-examples
+python2.7-dev
+
+COMPILATION AND INSTALLATION
+
+Compiling all HC tools:
+
+make all
+
+Compiling all HC tools manually if needed:
+
+cd ~/hyb/tools
+make libs
+cd hcvis
+make all
+make install
+cd ../misc
+make
+make install
+cd ../tracer
+make
+make install
+cd ../pyhc
+make
+
+Setup paths:
+
+echo export PATH=${PATH}:~/hyb/tools/bin/ >>~/.bashrc
+echo export HCVIS_ROOT=~/hyb/tools/hcvis/ >>~/.bashrc
+
+Compiling only hcintpol:
+
+make hcintpol

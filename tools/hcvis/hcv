@@ -1,0 +1,96 @@
+#!/bin/bash
+
+# This file is part of the HYB simulation platform.
+#
+# Copyright 2014- Finnish Meteorological Institute
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# startup script for hcvis
+
+HCVISBINARY=$HCVIS_ROOT"hcvis"
+
+# Select object
+if [ -z $1 ]; then
+ echo
+ PS3='Choose object: '
+ select object in "mercury" "venus" "moon" "mars" "titan"
+ do
+  break
+ done
+else
+ # Object given in a command line
+ object=$1
+fi
+
+# Set length unit
+if [ "$object" == "mercury" ]; then
+ scale=2439.7e3
+elif [ "$object" == "venus" ]; then
+ scale=6051.8e3
+elif [ "$object" == "moon" ]; then
+ scale=1737.1e3
+elif [ "$object" == "mars" ]; then
+ scale=3390e3
+elif [ "$object" == "titan" ]; then
+ scale=2575e3
+else
+ object="default"
+ scale=1000e3
+fi
+echo "setting scale = $scale ($object)"
+
+# Select file
+if [ -z $2 ]; then
+ echo
+ PS3='Choose hc-files: '
+ select hcfiles in "H+" "O+" "O2+" "ave" "plasma" "EXTRA" "DBUG" "all"
+ do
+  break
+ done
+else
+ # Species given in a command line
+ hcfiles=$2
+fi
+
+# Set hc files
+if [ "$hcfiles" == "H+" ]; then
+ files='H+*.hc'
+elif [ "$hcfiles" == "O+" ]; then
+ files='O+*.hc'
+elif [ "$hcfiles" == "O2+" ]; then
+ files='O2+*.hc'
+elif [ "$hcfiles" == "ave" ]; then
+ files='ave*.hc'
+elif [ "$hcfiles" == "plasma" ]; then
+ files='plasma*.hc'
+elif [ "$hcfiles" == "EXTRA" ]; then
+ files='EXTRA*.hc'
+elif [ "$hcfiles" == "DBUG" ]; then
+ files='DBUG*.hc'
+elif [ "$hcfiles" == "all" ]; then
+ files='*.hc'
+else
+ files='*.hc'
+fi
+
+echo "loading files $files"
+
+callpath=$(pwd)
+
+# Start hcvis
+echo "$HCVISBINARY -scale $scale $callpath/$files"
+$HCVISBINARY -scale $scale $callpath/$files &
+
+exit 0

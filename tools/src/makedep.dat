@@ -1,0 +1,23 @@
+realptr.o: realptr.C realptr.H cache.H
+cache.o: cache.C cache.H shmemintf.H
+cellcache.o: cellcache.C cellcache.H realptr.H BC.H gengrid.H cache.H
+shmemintf.o: shmemintf.C shmemintf.H
+vec.o: vec.C vec.H realptr.H
+sharr.o: sharr.C sharr.H realptr.H shmemintf.H
+cshmat.o: cshmat.C cshmat.H realptr.H cache.H shmemintf.H
+byteconv.o: byteconv.C byteconv.H
+fileheader.o: fileheader.C fileheader.H
+BC.o: BC.C BC.H gengrid.H realptr.H cache.H
+maps.o: maps.C maps.H gengrid.H realptr.H cache.H
+mempool.o: mempool.C mempool.H grid.H BC.H gengrid.H realptr.H cache.H \
+ fileheader.H vec.H shmemintf.H sharr.H cellcache.H cshmat.H byteconv.H
+gengrid.o: gengrid.C gengrid.H realptr.H cache.H
+grid.o: grid.C grid.H BC.H gengrid.H realptr.H cache.H fileheader.H vec.H \
+ shmemintf.H sharr.H cellcache.H state.H
+cartgrid.o: cartgrid.C cartgrid.H grid.H BC.H gengrid.H realptr.H cache.H \
+ fileheader.H vec.H shmemintf.H sharr.H cellcache.H byteconv.H
+HCgrid.o: HCgrid.C HCgrid.H mempool.H grid.H BC.H gengrid.H realptr.H \
+ cache.H fileheader.H vec.H shmemintf.H sharr.H cellcache.H cshmat.H
+metagrid.o: metagrid.C metagrid.H grid.H BC.H gengrid.H realptr.H cache.H \
+ fileheader.H vec.H shmemintf.H sharr.H cellcache.H cartgrid.H HCgrid.H \
+ mempool.H cshmat.H

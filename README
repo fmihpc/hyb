@@ -1,0 +1,63 @@
+HYB SIMULATION PLATFORM
+
+HYB (How You Been) is a versatile C++ quasi-neutral hybrid (QNH)
+plasma simulation platform for the solar wind and plasma interactions
+of celestial bodies. The HYB code is developed at the Finnish
+Meteorological Institute and the Aalto University. The HYB code and
+tools are distributed under the GPL v3 open source license by the
+Finnish Meteorological Institute.
+
+The latest version of HYB can be downloaded at:
+
+https://github.com/fmihpc/hyb
+
+Folders:
+
+sim/: The HYB simulation code
+tools/: Tools to analyze HYB output files
+
+HYB CODE
+
+HYB is a 3-dimensional code and uses Cartesian or spherical simulation
+mesh. The Cartesian mesh can be hierarchically refined to adjust the
+grid cell size within the simulation domain. HYB is a highly optimized
+and memory efficient serial code designed for the Linux environment.
+
+In the QNH approach positively charged ions are treated as macro
+particle clouds moving under the Lorentz force and electrons are a
+charge-neutralizing, massless fluid. The electron momentum equation
+(Ohm's law) defines the electric field. Faraday's law is used to
+propagate the magnetic field on the grid cell faces. Ampere's law
+gives the electric current density. A Yee type staggered mesh keeps
+magnetic field divergence-free.
+
+ACKNOWLEDGEMENTS
+
+We request acknowledging and citing the original code when publishing
+or presenting results from HYB. The HYB developers are open for
+scientific collaborations and further development of the code.
+
+Example acknowledgement text:
+
+"Simulations were performed using the HYB code distributed under the
+open source GPL v3 license by the Finnish Meteorological Institute
+(github.com/fmihpc/hyb)."
+
+CONTACTS
+
+Finnish Meteorological Institute:
+
+Dr. Riku Jarvinen (riku.jarvinen@fmi.fi)
+
+Aalto University:
+
+Prof. Esa Kallio (esa.kallio@aalto.fi)
+
+FURTHER INFORMATION
+
+The reference list of scientific articles using the HYB code and
+further information can be found at:
+
+http://hwa.fmi.fi/hyb/
+
+Copyright (c) 2014- Finnish Meteorological Institute

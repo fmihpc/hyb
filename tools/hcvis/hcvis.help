@@ -1,0 +1,71 @@
+This is hcvis, a Tcl/Tk/Togl/OpenGL based visualization program for
+analyzing HC files.
+-------------------------------------------------------------------
+Most of the menus are self-evident. Some hints to get you started.
+These are roughly ordered in the same way as the menus (beginning
+from the 'File' menu).
+
+- Typically you start hcvis by "hcvis *.hc". Additional HC files can
+be loaded later by using 'Load file'. Use 'Next file', 'Previous file'
+and 'Goto file' to attach a window to another file. The file list is
+common to all windows, but each window may be attached to a different
+file in it. 'Goto file' allows you to jump in the list of loaded
+files. Only those loaded files reside in memory which are currently
+bound to visible windows.
+
+- 'New view windows' can be created at will. They are independent.
+
+- Slave windows ('New slave window') are like other windows, except
+that they are linked to a "master window". When the master window is
+connected to a new datafile, the slaves are also attached to the same
+file.
+
+- A complete state of the program can be saved ('Save state'). This
+includes all window positions, flags, viewpoints, palettes, etc. The
+state file is a small text file .hcvisrc in current directory. Saving
+to other files is also possible ('Save state to ..'). Restoring the
+state succeeds properly only if the needed data files still exist.
+
+- To compare different variables and views in a single HC file (single
+time), use slave windows. It is then easy to go to the next time
+level, for instance, by selecting 'Next file' from the master window
+menu. All the slaves are updated automatically.
+
+- To compare different times, use ordinary independent windows ('New
+view window').
+
+- By using 'Edit objects' it is possible to add an arbitrary number of
+slices and field line bunches in 3D view. In 2D view, press X Y Z
+repeatedly to cycle through all X-directed slices if you have many.
+
+- By opening a 'Variable values' window, you can see all variable values at
+once in 2D viewing mode by clicking with the mouse.
+
+- If you have linked hcvis.C with the BLT library (see beginning of
+the Makefile), the '1D view window' menu brings up a window where you
+can view one-dimensional profiles in X,Y or Z direction at arbitrary
+points.
+
+- Besides using the 3D view point selector or the XYZ keys, you can
+press the arrow keys to rotate the 3D viewpoint. Arrows rotate by 10
+degree increments, Control-arrows by 2 degree. Shift-arrows rotate by
+90 degree in longitude and 45 in latitude; these are handy for quickly
+rotating the view 180 degrees, for example.
+
+- 'Mapping' is the analytic mapping from grid space into physical
+space. A fixed set of maps exists. Not all HC files define the mapping
+function name in their header parts. The type of mapping is taken from
+the first loaded HC file (Thus, all HC files viewed in one hcvis
+session should have similar mapping.) If no mapping is defined, the 
+'Mapping' menu item has no effect.
+
+- Zooming with the mouse is possible in the 2D view mode by dragging
+with the mouse (if the Variable values window is not open). A rubberbox
+is not shown, but zooming nevertheless works. The menu items Full zoom
+and Previous zoom are related to this.
+
+- 'Define box' allows you to reduce the visible volume of the
+simulation box. This is handy if the simulation box is very large and
+contains mostly uninteresting features. The limitation affects to
+everything else except field line tracing. Field lines are traced to
+the boundaries to the actual simulation box.

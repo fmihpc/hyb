@@ -1,0 +1,53 @@
+#!/bin/sh
+#
+# usage: hcgrep [-grep-options] grep-pattern [hcfiles.hc]
+# does a grep over the given HC files, restricting the search to the
+# header parts only (thus, not touching the data, which would be usually binary).
+
+# This file is part of the HYB simulation platform.
+#
+# Copyright 2014- Finnish Meteorological Institute
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+opts=""
+files=""
+grep=grep
+beenhere=false
+awk=awk
+while [ $# -gt 0 ]
+do
+	i=$1
+	case ".$i" in
+		.-*) opts="$opts $i" ;;
+		.*) if [ $beenhere = true ]; then
+                files="$files $i"
+            else
+                pattern=$i
+                beenhere=true
+            fi
+            ;;
+	esac
+	shift
+done
+if [ `echo $files | wc -w | tr -d ' '` = "1" ]; then
+    # only one file
+    $awk '/^eoh$/ {exit} {print}' <$i | $grep $opts "$pattern"
+else
+    # several files, prepend each grep output line with the filename, mimicing usual grep behavior
+    for i in $files
+    do
+        $awk '/^eoh$/ {exit} {print}' <$i | $grep $opts "$pattern" | $awk -v f=$i '{printf "%s: %s\n",f,$0}'
+    done
+fi
