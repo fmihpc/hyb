@@ -178,22 +178,29 @@ int main(int argc, char *argv[])
 		if (scanret < 1) {cerr << "*** hcintpol: syntax error in input file\n"; exit(6);}
 		Tdimvec X(x,y,z);
 	        if(isSpectraFile == false) {
-		   if (IgnoreGhost) {
-		      const TGridIndex ii = g.find(X);
-		      if (g.celltype(ii) != INTERIOR_CELL) {
-			 for (i=0; i<var.Nvars(); i++) varvalues[i] = 0;
-			 goto writefile;
-		      }
-		   }
-		   if (!g.intpol(X,intpol_order,true)) {
+			if (!g.intpol(X,intpol_order,true))
+		    {
 		      warn++;
 		      for (i=0; i<var.Nvars(); i++) varvalues[i] = -999;
-		   } else {
+		    }
+		    else
+		    {
+				if (IgnoreGhost) 
+				{
+					const TGridIndex ii = g.find(X);
+					if (g.celltype(ii) != INTERIOR_CELL)
+					{
+						for (i=0; i<var.Nvars(); i++) varvalues[i] = -999;
+						goto writefile;
+					}
+				}
+
 		      ok++;
-		      for (i=0; i<var.Nvars(); i++) {
-			 if (!varflags[i]) {varvalues[i] = -999; continue;}
-			 var.select(varnames[i],Gamma,Invmu0,Mass);
-			 varvalues[i] = var.get(g,X);
+		      for (i=0; i<var.Nvars(); i++)
+			  {
+					if (!varflags[i]) {varvalues[i] = -999; continue;}
+					var.select(varnames[i],Gamma,Invmu0,Mass);
+					varvalues[i] = var.get(g,X);
 		      }
 		   }
 writefile:
