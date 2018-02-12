@@ -1,9 +1,8 @@
 #!/bin/bash
-# "USAGE: hyblog_pdf_all.sh [dir1/] [dir2/] [dir3/] [...]"
-# Old name was of this script was: genlogpdfsall.sh
 
 # This file is part of the HYB simulation platform.
 #
+# Copyright 2018- Aalto University
 # Copyright 2014- Finnish Meteorological Institute
 #
 # This program is free software: you can redistribute it and/or modify
@@ -21,18 +20,25 @@
 
 # multiple dirs
 if [ "$#" -le "0" ]; then
+ echo "USAGE: hyblog_pdf_all.sh lin/log [dir1/] [dir2/] [dir3/] [...]"
+elif [ "$#" -eq "1" ]; then
  sdirs=""
  firstdir=./
 else
- sdirs=$@
- firstdir=$1
+ sdirs=$(echo $@ | cut -d " " -f 2-)
+ firstdir=$2
+fi
+
+if ! [[ "$1" =~ ^("lin"|"log")$ ]]; then
+ echo "USAGE: hyblog_pdf_all.sh lin/log [dir1/] [dir2/] [dir3/] [...]"
+ exit 1
 fi
 
 for i in $(/bin/ls ${firstdir}pop*.log)
 do
  i=$(basename $i)
  echo "plotting $i"
- hyblog_pdf.sh $i $sdirs
+ hyblog_pdf.sh $i $1 $sdirs
 done
 echo "plotting field.log"
-hyblog_pdf.sh field.log $sdirs
+hyblog_pdf.sh field.log $1 $sdirs

@@ -1,8 +1,8 @@
 #!/bin/bash
-# Old name was of this script was: genlogpdfs.sh
 
 # This file is part of the HYB simulation platform.
 #
+# Copyright 2018- Aalto University
 # Copyright 2014- Finnish Meteorological Institute
 #
 # This program is free software: you can redistribute it and/or modify
@@ -21,17 +21,27 @@
 CMDFILE=gnuplot.cmd
 
 logfile=$1
+uselogscale=0
 
 # multiple dirs
 if [ "$#" -le "0" ]; then
- echo "USAGE: hyblog_pdf.sh field.log [dir1/] [dir2/] [dir3/] [...]"
+ echo "USAGE: hyblog_pdf.sh field.log lin/log [dir1/] [dir2/] [dir3/] [...]"
  exit 1
-elif [ "$#" -eq "1" ]; then
+elif [ "$#" -eq "2" ]; then
  sdirs=./
  logfile_full=$logfile
 else
- sdirs=$(echo $@ | cut -d " " -f 2-)
+ sdirs=$(echo $@ | cut -d " " -f 3-)
  logfile_full=$(echo $sdirs |cut -f 1 -d ' ')$logfile
+fi
+
+if [ "$2" == "lin" ]; then
+ uselogscale=0
+elif [ "$2" == "log" ]; then
+ uselogscale=1
+ else
+ echo "USAGE: hyblog_pdf.sh field.log lin/log [dir1/] [dir2/] [dir3/] [...]"
+ exit 1
 fi
 
 # parse header
@@ -80,6 +90,13 @@ while [ $i -le $cols ]; do
  ntitle=$((nc+i))
  title=$(sed -n ''${ntitle}p'' $logfile_full | cut -c3-)
  echo set ylabel \"$title\" >>$CMDFILE
+ if [ $uselogscale == 1 ] && [[ "$title" =~ ^("05. avg(|B|) [T]"|"06. max(|B|) [T]"|"10. energy(sum(dV*B^2/2*mu0)) [J]"|"07. avg(|V|) [m/s]"|"08. Kinetic energy [J]")$ ]] ; then
+  echo set logscale y >>$CMDFILE
+  echo set format y \"10^{%L}\" >>$CMDFILE
+ else
+  echo unset logscale y >>$CMDFILE
+  echo unset format y >>$CMDFILE
+ fi
  
  # plot command
  #echo plot \"$logfile_full\" using 1:$i title \"\" w l >>$CMDFILE
