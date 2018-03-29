@@ -95,7 +95,7 @@ while [ $i -le $cols ]; do
   echo set format y \"10^{%L}\" >>$CMDFILE
  else
   echo unset logscale y >>$CMDFILE
-  echo unset format y >>$CMDFILE
+  echo unset format >>$CMDFILE
  fi
  
  # plot command
