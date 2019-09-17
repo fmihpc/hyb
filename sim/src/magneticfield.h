@@ -64,6 +64,8 @@ private:
     void setArgs_generalDipoleB();
     void hemisphericDipoleB(const gridreal r[],datareal B[]);
     void setArgs_hemisphericDipoleB();
+    void dipoleCuspB(const gridreal r[],datareal B[]);
+    void setArgs_dipoleCuspB();
     // MAGNETIC FIELD PARAMETERS
     void resetParameters();
     real Bx,By,Bz,Btot,R,R3;

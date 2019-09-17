@@ -81,6 +81,7 @@ MagneticFieldProfile::MagneticFieldProfile(string funcName,vector<real> args)
     ELSEIF_MAGNETIC(translateDipoleB)
     ELSEIF_MAGNETIC(generalDipoleB)
     ELSEIF_MAGNETIC(hemisphericDipoleB)
+    ELSEIF_MAGNETIC(dipoleCuspB)
 #ifdef USE_SPHERICAL_COORDINATE_SYSTEM
     ELSEIF_MAGNETIC(sph_laminarFlowAroundSphereBx)
     ELSEIF_MAGNETIC(sph_laminarFlowAroundSphereBz)
@@ -526,6 +527,52 @@ void MagneticFieldProfile::hemisphericDipoleB(const gridreal r[3],datareal B[3])
     B[0] += coeff*x*(hemiCoeffDip*z + 0.5*hemiCoeffQuad*dipSurfR*(5*sqr(z)/r2 - 1));
     B[1] += coeff*y*(hemiCoeffDip*z + 0.5*hemiCoeffQuad*dipSurfR*(5*sqr(z)/r2 - 1));
     B[2] += coeff*(hemiCoeffDip*(sqr(z) - r2/3.0) + 0.5*hemiCoeffQuad*dipSurfR*z*(5*sqr(z) - 3*r2)/r2);
+}
+
+/** \brief Set function arguments for dipole field in the x-direction located at (x0,y0,z0)
+ *
+ * Config file format: dipoleCuspB surfB surfR Rmin x0 y0 z0
+ * surfB = magnitude of the dipole field at the surface (equator), sign(surfB) gives the orientation
+ * surfR = surface radius
+ * Rmin  = the field is set to zero inside this radius (dipole field diverges as r->0)
+ * x0    = x coordinate of the dipole
+ * y0    = y coordinate of the dipole
+ * z0    = z coordinate of the dipole
+ */
+void MagneticFieldProfile::setArgs_dipoleCuspB()
+{
+    if(args.size() != 6) {
+        ERRORMSG2("function takes six arguments",name);
+        doabort();
+    }
+    dipSurfB = args[0];
+    dipSurfR = args[1];
+    dipMomCoeff = 3.0*dipSurfB*cube(dipSurfR);
+    dipRmin2 = sqr(args[2]);
+    xOrigin = args[3];
+    yOrigin = args[4];
+    zOrigin = args[5];
+}
+
+//! Dipole field in the x-direction located at (x0,y0,z0)
+void MagneticFieldProfile::dipoleCuspB(const gridreal r[3],datareal B[3])
+{
+    const gridreal x = r[0] - xOrigin;
+    const gridreal y = r[1] - yOrigin;
+    const gridreal z = r[2] - zOrigin;
+    const real r2 = sqr(x) + sqr(y) + sqr(z);
+    if(r2 < dipRmin2) {
+        return;
+    }
+    const real rr = sqrt(r2);
+    const real r5 = sqr(r2)*rr;
+    const real coeff = dipMomCoeff/r5;
+    //B[0] += coeff*x*z;
+    //B[1] += coeff*y*z;
+    //B[2] += coeff*(sqr(z) - r2/3.0);
+    B[0] += coeff*(sqr(x) - r2/3.0);
+    B[1] += coeff*y*x;
+    B[2] += coeff*z*x;
 }
 
 //! Add constant magnetic field in B
