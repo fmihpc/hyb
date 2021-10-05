@@ -223,7 +223,7 @@ void Diagnostics::logFields()
         flog.precision(10);
         flog
                 << "% field\n"
-                << "% columns = 13\n"
+                << "% columns = 14\n"
                 << "% 01. Time [s]\n"
                 << "% 02. avg(Bx) [T]\n"
                 << "% 03. avg(By) [T]\n"
@@ -237,6 +237,7 @@ void Diagnostics::logFields()
                 << "% 11. cutE rate [#/dt]\n"
                 << "% 12. cutRhoQ rate [#/dt]\n"
                 << "% 13. cutUe rate [#/dt]\n"
+                << "% 14. maxVw rate [#/dt]\n"
                 << flush;
         initDone = true;
     }
@@ -262,6 +263,7 @@ void Diagnostics::logFields()
     flog << Tgrid::fieldCounter.cutRateE << "\t";
     flog << Tgrid::fieldCounter.cutRateRhoQ << "\t";
     flog << Tgrid::fieldCounter.cutRateUe << "\t";
+    flog << Tgrid::fieldCounter.cutRateMaxVw << "\t";
     flog << "\n" << flush;
     // Maximum B field reached => set program termination flag and save hc-files
     if (magLog.maxB >= Params::B_limit) {

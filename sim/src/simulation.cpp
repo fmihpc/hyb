@@ -221,6 +221,7 @@ void Simulation::initializeSimulation()
             << "| vi_max = " << Params::vi_max/1e3 << " km/s\n"
             << "| Ue_max = " << Params::Ue_max/1e3 << " km/s\n"
             << "| rho_q_min  = " << Params::rho_q_min/(Params::e*1e6) << " e/cm^3\n"
+            << "| maxVw      = " << Params::maxVw/1e3 << " km/s\n"
             << "| min(dx)/dt = " << Params::dx/real(1 << Params::currentGridRefinementLevel)/Params::dt*1e-3 << " km/s\n"
             << "| M_P = " << Params::M_P << " kg\n"
             << "| Use Jstag = " << (Params::useJstag ? "yes" : "no") << "\n"
@@ -954,6 +955,10 @@ void Simulation::fieldpropagate(Tgrid::TFaceDataSelect fsBnew,
     }
     // Interpolate B from cells to nodes
     g.CN(Tgrid::CELLDATA_B,Tgrid::NODEDATA_B);
+    if(Params::useNodeUe == true) {
+       g.Neumann_rhoq();  // should allready be done?
+       g.CN_ne();
+    }
     if(Params::useJstag == true) { // alternative j calculation
         // J TO NODES CALCULATION.
         g.boundary_faces(Tgrid::FACEDATA_B);
@@ -973,8 +978,8 @@ void Simulation::fieldpropagate(Tgrid::TFaceDataSelect fsBnew,
     // Extend U_e to ghost cells
     g.Neumann(Tgrid::CELLDATA_UE);
     if(Params::useNodeUe == true) { // Calculate Ue separately to nodes
-        g.Neumann_rhoq();  // should allready be done?
-        g.CN_ne();
+        //g.Neumann_rhoq();  // should allready be done?
+        //g.CN_ne();
         g.Neumann(Tgrid::CELLDATA_Ji);
         g.CN(Tgrid::CELLDATA_Ji,Tgrid::NODEDATA_Ji);
         g.calc_node_ue();

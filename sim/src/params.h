@@ -353,6 +353,7 @@ public:
     static real Ue_max;
     static real Ue_max2;
     static real rho_q_min;
+    static real maxVw;
     static int densitySmoothingNumber;
     static int electricFieldSmoothingNumber;
     static std::string resistivityFUNC;

@@ -4664,6 +4664,7 @@ void FieldCounter::reset()
     cutRateE = 0.0;
     cutRateRhoQ = 0.0;
     cutRateUe = 0.0;
+    cutRateMaxVw = 0.0;
     resetTimestep = Params::cnt_dt;
 }
 
@@ -4675,10 +4676,12 @@ void FieldCounter::finalize()
         cutRateE /= timeSteps;
         cutRateRhoQ /= timeSteps;
         cutRateUe /= timeSteps;
+        cutRateMaxVw /= timeSteps;
     } else {
         cutRateE = 0;
         cutRateRhoQ = 0;
         cutRateUe = 0;
+        cutRateMaxVw = 0;
     }
 }
 
@@ -4870,6 +4873,21 @@ void Tgrid::Tnode::calc_j(real dx)
     nodedata[NODEDATA_J][0] = jcomponent(0,dx);
     nodedata[NODEDATA_J][1] = jcomponent(1,dx);
     nodedata[NODEDATA_J][2] = jcomponent(2,dx);
+    real vw = 0.0;
+    const real rho_q = nodedata[NODEDATA_ne][0];
+    const real Btot = sqrt( sqr(nodedata[NODEDATA_B][0]) + sqr(nodedata[NODEDATA_B][1]) + sqr(nodedata[NODEDATA_B][2]) );
+    if(rho_q > 0.0 && dx > 0.0) {
+       vw = 2.0*Btot*M_PI/( Params::mu_0*rho_q*dx );
+    }
+    if (vw > Params::maxVw && Params::maxVw > 0.0) {
+       const real d = Params::maxVw/vw;
+       nodedata[NODEDATA_J][0] *= d;
+       nodedata[NODEDATA_J][1] *= d;
+       nodedata[NODEDATA_J][2] *= d;
+#ifndef NO_DIAGNOSTICS
+       Tgrid::fieldCounter.cutRateMaxVw += 1.0;
+#endif
+    }
 }
 
 //! Calculate J at a node (recursive)

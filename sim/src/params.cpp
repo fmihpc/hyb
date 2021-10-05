@@ -585,6 +585,9 @@ real Params::Ue_max2 = 0;
 //! Minimum charge density in a cell, rho_q = max(rho_q, rho_q_min) [C/m^3]
 real Params::rho_q_min = 0;
 
+//! Maximum whistler wave speed [m/s]
+real Params::maxVw = 0;
+
 //! Use predictor corrector scheme in Faraday's law [-]
 bool Params::fieldPredCor = 0;
 
@@ -1320,6 +1323,7 @@ void Params::initVariables()
     ADD_REAL(vi_max, "Constraint: maximum ion velocity [m/s]");
     ADD_REAL(Ue_max, "Constraint: maximum electron velocity [m/s]");
     ADD_REAL(rho_q_min, "Constraint: minimum charge density in a cell, rho_q = max(rho_q, rho_q_min) [C/m^3]");
+    ADD_REAL(maxVw, "Constraint: maximum whistler wave speed [m/s]");
     ADD_REAL(t_max, "Duration of simulation run [s]");
     ADD_REAL(saveInterval, "Save interval for output files [s]");
     ADD_INT(saveHC, "Whether to save HC files (0 = no, 1 = binary, 2 = ascii) [-]");

@@ -50,6 +50,7 @@ struct FieldCounter {
     real cutRateE;
     real cutRateRhoQ;
     real cutRateUe;
+    real cutRateMaxVw;
     int resetTimestep;
     FieldCounter();
     void reset();
