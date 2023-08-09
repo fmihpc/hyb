@@ -31,11 +31,13 @@ propagate the magnetic field on the grid cell faces. Ampere's law
 gives the electric current density. A Yee type staggered mesh keeps
 magnetic field divergence-free.
 
-ACKNOWLEDGEMENTS
+ACKNOWLEDGEMENTS, CO-AUTHORSHIP AND CITING
 
-We request acknowledging and citing the original code when publishing
-or presenting results from HYB. The HYB developers are open for
-scientific collaborations and further development of the code.
+The HYB developers strongly encourage offering us co-authorship as
+well as acknowledging and citing the original model when publishing or
+presenting results where HYB code was used. We are open for scientific
+collaborations and further development of the model and are committed
+to open science.
 
 Example acknowledgement text:
 
